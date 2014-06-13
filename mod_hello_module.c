@@ -45,14 +45,11 @@
 /* The sample content handler */
 static int hello_module_handler(request_rec *r)
 {
-    if (strcmp(r->handler, "hello_module")) {
-        return DECLINED;
+    if (! strcmp(r->content_type, "text/html") && ! r->header_only) {
+        ap_rputs("hello world<br />\n", r);
     }
-    r->content_type = "text/html";      
 
-    if (!r->header_only)
-        ap_rputs("The sample page from mod_hello_module.c\n", r);
-    return OK;
+    return DECLINED;
 }
 
 static void hello_module_register_hooks(apr_pool_t *p)
