@@ -27,13 +27,27 @@ Makefileが見てるのはこっち。
 - 設定ファイル（その時点のDocumentRoot）の内容を文字列として得る
 - 新しいdocrootのパスを編集し、DocumentRootを書き換える
 
+# その他メモ
 
-# そのためも
+## でフォルトのhttpd.confの場所
 
-## httpd.confの場所
 /etc/apache2/httpd.conf
+
 - http://blog.kcg.ne.jp/leeway/2009/12/06/mac-os-x-snow-leopardのguiでapache2のhttpd-confを編集保存する/
 
-## docrootの場所
+## デフォルトのdocrootの場所
+
 /Library/WebServer/Documents
+
+## プリコンパイル
+
+構造体の構成とかAPIがぜんぜん分からんので、取り込むヘッダファイルを見る。
+Apacheならちゃんとコメント書いてあるはず。またC言語ならコンパイル時に必ず定義を書いた.hを取り込んでいるはず。
+ヘッダファイルの場所が分からないが、コンパイルオプションの指定でプリコンパイル時点で止めることができる。
+ccの-Eオプションでプリコンパイルで止める。 これだけだとコメントが除去されてしまうので、-Cオプションでコメントを残す。
+
+で、makeのコンパイルのコマンドに -E -C を加えて結果をリダイレクトする。
+
+    $ /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc -I/usr/local/include    -DDARWIN -DSIGPROCMASK_SETS_THREAD_MASK    -I/usr/include/apache2 -I. -I/usr/include/apr-1  -c mod_hello_module.c -C -E > precompile.txt
+
 
